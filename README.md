@@ -2,7 +2,7 @@
 A bot to MineSweeper x64 for Microsoft Windows 7, that mark every mine with a flag and write mine position to your screen, internal cheat based on reading/writing memory
 
 # How does it work?
-MineSweeper Bot read data from game memory, and then mark every field with mines (writing to memory)
+MineSweeper Bot read data from game memory, then it places flags on fields with mines (writing to memory)
 
 # How can i test it?
 You need to compile it in x64 mode and then inject it into minesweeper.exe (x64) - you can use CheatEngine to inject .dll into process
