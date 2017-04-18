@@ -10,17 +10,28 @@ DWORD WINAPI DllStart(LPVOID param)
 
 	MineSweeper* mineSweeper = *(MineSweeper**)((DWORD)GetModuleHandleA("minesweeper.exe") + 0xAAA38);
 	GameState* gameState = mineSweeper->gameState;
-	SimpleArray* simpleArray = gameState->simpleArray;
+	SimpleArray<SimpleArray<BYTE>*>* simpleArray = gameState->simpleArray;
+	SimpleArray<SimpleArray<int>*>* flagsArray = gameState->flagsArray;
+	GraphicArray* graphicArray = mineSweeper->graphicArray;
 
 	for (int i = 0; i != gameState->xSize; ++i)
 	{
 		for (int j = 0; j != gameState->ySize; j++)
 		{
-			MineArray* mineArray = simpleArray->array[j];
-			std::cout << (int)mineArray->data[i];
+			bool isMine = simpleArray->array[j]->array[i];
+			std::cout << isMine;
+
+			if (isMine)
+			{
+				flagsArray->array[j]->array[i] = 0xA;
+				graphicArray->data[j]->array[i]->needUpdate = 1;
+				gameState->markedMines++;
+			}
 		}
 		std::cout << std::endl;
 	}
+	
+	graphicArray->shouldUpdate = 1;
 	return 0;
 }
 
