@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Structures.hpp"
 
-DWORD WINAPI DllStart(LPVOID param)
+void markAndWriteMines()
 {
 	std::cout << "****************************" << std::endl;
 	std::cout << "MineSweeper x64 - Mine detector by morsisko" << std::endl;
@@ -21,17 +21,39 @@ DWORD WINAPI DllStart(LPVOID param)
 			bool isMine = simpleArray->array[j]->array[i];
 			std::cout << isMine;
 
-			if (isMine)
-			{
-				flagsArray->array[j]->array[i] = 0xA;
-				graphicArray->data[j]->array[i]->needUpdate = 1;
-				gameState->markedMines++;
-			}
+			if (!isMine)
+				continue;
+			
+			if (flagsArray->array[j]->array[i] == 0xA)
+				continue;
+
+			flagsArray->array[j]->array[i] = 0xA;
+			graphicArray->data[j]->array[i]->needUpdate = 1;
+			gameState->markedMines++;
+			
 		}
 		std::cout << std::endl;
 	}
-	
+
 	graphicArray->shouldUpdate = 1;
+}
+
+DWORD WINAPI DllStart(LPVOID param)
+{
+
+	while (!(GetAsyncKeyState(VK_F8) & 0x0001))
+	{
+		if (GetAsyncKeyState(VK_F3) & 0x0001)
+		{
+			system("cls"); //using winapi anyway so will work for windows only
+			markAndWriteMines();
+			Sleep(100);
+		}
+
+		Sleep(10);
+	}
+
+	std::cout << "Goodbay\n";
 	return 0;
 }
 
